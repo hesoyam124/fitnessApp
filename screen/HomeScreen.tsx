@@ -1,6 +1,8 @@
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
 import { useEffect } from 'react';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
+import data from "../data.json";
+import { Workout } from '../types/data';
 
 
 
@@ -8,20 +10,39 @@ export default function HomeScreen({ navigation }: NativeStackHeaderProps) {
 
 
 
-    useEffect(() => {
-        console.log("home sckrin");
-        return() => console.log("unmounting home")
-    }, [])
+    const renderItem = ({ item }: { item: Workout }) => {
+
+        return (
+
+            <View>
+
+                <Text>{item.name}</Text>
+                <Text>{item.difficulty}</Text>
+            </View>
+
+        );
+
+
+
+    }
 
 
     return (
-        <View>
+        <View style={styles.container}>
             <Text>home screen</Text>
-            <Button
-                title="Go to Planner"
-                onPress={() => navigation.navigate("Planner")}
+            <FlatList
+                data={data as Array<Workout>}
+                renderItem={renderItem}
+                keyExtractor={item => item.slug}
             />
         </View>
     )
 
 }
+
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 20
+    },
+})
